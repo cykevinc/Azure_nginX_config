@@ -14,8 +14,8 @@ server {
     add_header X-Content-Type-Options "nosniff";
     add_header X-XSS-Protection "1; mode=block";
     add_header Strict-Transport-Security 'max-age=31536000; includeSubDomains; preload' always;
-	#add_header Content-Security-Policy "default-src 'self'; font-src *; img-src *"
-    add_header Content-Security-Policy "default-src 'self';font-src *; img-src * data: maps.gstatic.com *.googleapis.com *.ggpht.com; script-src maps.googleapis.com; style-src * 'unsafe-inline'; frame-src 'self' www.google.com; frame-ancestors 'self' https://www.google.com/;";
+
+    add_header Content-Security-Policy "default-src 'self';font-src 'self'; img-src 'self' data: maps.gstatic.com *.googleapis.com *.ggpht.com; script-src 'self' maps.googleapis.com; style-src 'self' 'unsafe-inline'; frame-src 'self' www.google.com; frame-ancestors 'self' https://www.google.com/;";
 	#add_header Content-Security-Policy "default-src 'self'; font-src *; img-src * data: maps.gstatic.com *.googleapis.com *.ggpht.com; script-src maps.googleapis.com; style-src * unsafe-inline"; 
     add_header Referrer-Policy "strict-origin";
 	
@@ -45,6 +45,22 @@ server {
         deny all;
         access_log off;
         log_not_found off;
+    }
+	
+	location ~* ^/images {
+		try_files $uri $uri/;
+    }
+	
+	location ~* ^/css {
+		try_files $uri $uri/;
+    }
+	
+	location ~* ^/asset {
+		try_files $uri $uri/;
+    }
+		
+	location ~* ^/upload/images {
+		try_files $uri $uri/;
     }
 	
 	location ~* [^/]\.*(/|$) {
